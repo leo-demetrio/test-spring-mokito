@@ -22,7 +22,7 @@ public class LocalConfig {
     @Bean
     public void initDB() {
         User u1 = new User(null, "Leo1", "leo1@gmail.com", "123");
-        User u2 = new User(null, "Leo2", "leo1@gmail.com", "123");
+        User u2 = new User(null, "Leo2", "leo2@gmail.com", "123");
 
         userRepository.saveAll(List.of(u1,u2));
     }
