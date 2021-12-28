@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
@@ -31,6 +32,7 @@ class UserServiceImplTest {
     public static final String NAME = "Leo";
     public static final String EMAIL = "leo@gmail.com";
     public static final String PASSWORD = "123";
+    public static final String MESSAGE = "Usuário não encontrado";
 
     @Mock
     private UserRepository repository;
@@ -65,17 +67,25 @@ class UserServiceImplTest {
 
     @Test
     void whenFindByIdThenReturnAnObjectNotFoundException() {
-        when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundException("Usuário não encontrado"));
+        when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundException(MESSAGE));
         try {
             userServiceImpl.findById(ID);
         } catch(Exception e) {
             assertEquals(ObjectNotFoundException.class, e.getClass());
-            assertEquals("Usuário não encontrado", e.getMessage());
+            assertEquals(MESSAGE, e.getMessage());
         }
     }
 
     @Test
-    void findAll() {
+    void whenFindAllThenReturnAnListOfUsers() {
+        when(repository.findAll()).thenReturn(List.of(user));
+        List<User> listUser = userServiceImpl.findAll();
+        assertNotNull(listUser);
+        assertEquals(1, listUser.size());
+        assertEquals(User.class, listUser.get(0).getClass());
+        assertEquals(ID, listUser.get(0).getId());
+        assertEquals(NAME, listUser.get(0).getName());
+        assertEquals(EMAIL, listUser.get(0).getEmail());
 
     }
 
