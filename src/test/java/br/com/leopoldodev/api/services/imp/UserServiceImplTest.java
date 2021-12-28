@@ -3,6 +3,7 @@ package br.com.leopoldodev.api.services.imp;
 import br.com.leopoldodev.api.domain.User;
 import br.com.leopoldodev.api.domain.dto.UserDTO;
 import br.com.leopoldodev.api.repositories.UserRepository;
+import br.com.leopoldodev.api.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
@@ -62,7 +64,19 @@ class UserServiceImplTest {
     }
 
     @Test
+    void whenFindByIdThenReturnAnObjectNotFoundException() {
+        when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundException("Usuário não encontrado"));
+        try {
+            userServiceImpl.findById(ID);
+        } catch(Exception e) {
+            assertEquals(ObjectNotFoundException.class, e.getClass());
+            assertEquals("Usuário não encontrado", e.getMessage());
+        }
+    }
+
+    @Test
     void findAll() {
+
     }
 
     @Test
