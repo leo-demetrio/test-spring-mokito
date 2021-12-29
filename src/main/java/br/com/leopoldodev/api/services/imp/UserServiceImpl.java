@@ -4,11 +4,10 @@ import br.com.leopoldodev.api.domain.User;
 import br.com.leopoldodev.api.domain.dto.UserDTO;
 import br.com.leopoldodev.api.repositories.UserRepository;
 import br.com.leopoldodev.api.services.UserService;
+import br.com.leopoldodev.api.services.exceptions.DataIntegrityViolationException;
 import br.com.leopoldodev.api.services.exceptions.ObjectNotFoundException;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
