@@ -2,19 +2,27 @@ package br.com.leopoldodev.api.resources;
 
 import br.com.leopoldodev.api.domain.User;
 import br.com.leopoldodev.api.domain.dto.UserDTO;
-import br.com.leopoldodev.api.services.UserService;
+import br.com.leopoldodev.api.services.imp.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
+
+
+import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
 
 
 
-@AllArgsConstructor
 @SpringBootTest
 class UserResourceTest {
 
@@ -37,7 +45,7 @@ class UserResourceTest {
     private ModelMapper mapper;
 
     @Mock
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
 
     @BeforeEach
     void setUp() {
@@ -46,7 +54,18 @@ class UserResourceTest {
     }
 
     @Test
-    void findById() {
+    void whenFindByIdThenReturnSuccess() {
+        when(userServiceImpl.findById(anyInt())).thenReturn(user);
+        when(mapper.map(any(), any())).thenReturn(userDTO);
+        ResponseEntity<UserDTO> userResponse = userResource.findById(ID);
+
+        assertNotNull(userResponse);
+        assertNotNull(userResponse.getBody());
+        assertEquals(ResponseEntity.class, userResponse.getClass());
+        assertEquals(UserDTO.class, userResponse.getBody().getClass());
+        assertEquals(ID, userResponse.getBody().getId());
+        assertEquals(NAME, userResponse.getBody().getName());
+        assertEquals(EMAIL, userResponse.getBody().getEmail());
     }
 
     @Test
