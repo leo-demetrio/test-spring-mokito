@@ -12,8 +12,12 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -69,7 +73,20 @@ class UserResourceTest {
     }
 
     @Test
-    void findAll() {
+    void whenFindAllThenReturnAListUserDTO() {
+        when(userServiceImpl.findAll()).thenReturn(List.of(user));
+        when(mapper.map(any(), any())).thenReturn(userDTO);
+        ResponseEntity<List<UserDTO>> userResponse = userResource.findAll();
+
+        assertNotNull(userResponse);
+        assertNotNull(userResponse.getBody());
+        assertEquals(HttpStatus.OK, userResponse.getStatusCode());
+        assertEquals(ResponseEntity.class, userResponse.getClass());
+        assertEquals(ArrayList.class, userResponse.getBody().getClass());
+        assertEquals(UserDTO.class, userResponse.getBody().get(0).getClass());
+        assertEquals(ID, userResponse.getBody().get(0).getId());
+        assertEquals(NAME, userResponse.getBody().get(0).getName());
+        assertEquals(EMAIL, userResponse.getBody().get(0).getEmail());
     }
 
     @Test
