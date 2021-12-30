@@ -31,6 +31,11 @@ class UserServiceImplTest {
     public static final String PASSWORD = "123";
     public static final String MESSAGE = "Usuário não encontrado";
     public static final String EMAIL_JA_CADASTRADO = "Email já cadastrado";
+    public static final String OBJETO_NAO_ENCONTRADO = "Objeto não encontrado";
+
+    private User user;
+    private UserDTO userDTO;
+    private Optional<User> optionalUser;
 
     @Mock
     private UserRepository repository;
@@ -41,9 +46,6 @@ class UserServiceImplTest {
     @Mock
     private ModelMapper modelMapper;
 
-    private User user;
-    private UserDTO userDTO;
-    private Optional<User> optionalUser;
 
     @BeforeEach
     void setUp() {
@@ -144,12 +146,12 @@ class UserServiceImplTest {
 
     @Test
     void deleteWhitObjectNotFoundException() {
-        when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundException("Objeto não encontrado"));
+        when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundException(OBJETO_NAO_ENCONTRADO));
         try {
             userServiceImpl.delete(ID);
         } catch(Exception e) {
             assertEquals(ObjectNotFoundException.class, e.getClass());
-            assertEquals("Objeto não encontrado",e.getMessage());
+            assertEquals(OBJETO_NAO_ENCONTRADO,e.getMessage());
         }
     }
 
