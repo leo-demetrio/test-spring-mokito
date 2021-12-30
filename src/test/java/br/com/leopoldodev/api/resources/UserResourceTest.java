@@ -21,8 +21,7 @@ import java.util.List;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 
@@ -90,7 +89,14 @@ class UserResourceTest {
     }
 
     @Test
-    void create() {
+    void whenCreateThenReturnCreated() {
+        when(userServiceImpl.create(any())).thenReturn(user);
+        ResponseEntity<UserDTO> userResponse = userResource.create(userDTO);
+
+        assertEquals(HttpStatus.CREATED, userResponse.getStatusCode());
+        assertNotNull(userResponse.getHeaders().getLocation());
+        assertNotNull(userResponse.getHeaders().get("Location"));
+        assertEquals(ResponseEntity.class, userResponse.getClass());
     }
 
     @Test
