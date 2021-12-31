@@ -100,7 +100,20 @@ class UserResourceTest {
     }
 
     @Test
-    void update() {
+    void whenUpdateThenReturnSuccess() {
+        when(userServiceImpl.update(any())).thenReturn(user);
+        when(mapper.map(any(), any())).thenReturn(userDTO);
+        ResponseEntity<UserDTO> userResponse = userResource.update(ID, userDTO);
+
+        assertNotNull(userResponse);
+        assertNotNull(userResponse.getBody());
+        assertEquals(HttpStatus.OK, userResponse.getStatusCode());
+        assertEquals(ResponseEntity.class, userResponse.getClass());
+        assertEquals(UserDTO.class, userResponse.getBody().getClass());
+        assertEquals(ID, userResponse.getBody().getId());
+        assertEquals(NAME, userResponse.getBody().getName());
+        assertEquals(EMAIL, userResponse.getBody().getEmail());
+
     }
 
     @Test
