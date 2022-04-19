@@ -93,7 +93,6 @@ class UserResourceTest {
         ResponseEntity<UserDTO> userResponse = userResource.create(userDTO);
 
         assertEquals(HttpStatus.CREATED, userResponse.getStatusCode());
-        assertNotNull(userResponse.getHeaders().getLocation());
         assertNotNull(userResponse.getHeaders().get("Location"));
         assertEquals(ResponseEntity.class, userResponse.getClass());
     }
@@ -121,7 +120,6 @@ class UserResourceTest {
         ResponseEntity<UserDTO> response = userResource.delete(ID);
         assertNotNull(response);
         assertEquals(ResponseEntity.class, response.getClass());
-        verify(userServiceImpl, times(1));
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     }
 
