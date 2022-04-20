@@ -3,12 +3,10 @@ package br.com.leopoldodev.api.resources;
 import br.com.leopoldodev.api.domain.User;
 import br.com.leopoldodev.api.domain.dto.UserDTO;
 import br.com.leopoldodev.api.services.imp.UserServiceImpl;
-import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -95,6 +93,7 @@ class UserResourceTest {
         assertEquals(HttpStatus.CREATED, userResponse.getStatusCode());
         assertNotNull(userResponse.getHeaders().get("Location"));
         assertEquals(ResponseEntity.class, userResponse.getClass());
+        assertNotNull(userResponse.getHeaders().getLocation());
     }
 
     @Test
@@ -121,6 +120,7 @@ class UserResourceTest {
         assertNotNull(response);
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        verify(userServiceImpl, times(1)).delete(anyInt());
     }
 
     private void startUser() {
